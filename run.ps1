@@ -299,8 +299,8 @@ if ($psv -ge 7) {
 function CallLang($clg) {
 
     $urlLang = switch ($mirror) {
-        $true { "https://mrnico98.github.io/AIMODS-Spotify/scripts/installer-lang/$clg.ps1" }
-        default { "https://raw.githubusercontent.com/MrNico98/AIMODS-Spotify/main/scripts/installer-lang/$clg.ps1" }
+        $true { "https://mrnico98.github.io/SimpleSpotify/scripts/installer-lang/$clg.ps1" }
+        default { "https://raw.githubusercontent.com/MrNico98/SimpleSpotify/main/scripts/installer-lang/$clg.ps1" }
     }
     
     $ProgressPreference = 'SilentlyContinue'
@@ -653,7 +653,7 @@ $ch = $null
 if ($langCode -eq 'ru' -and [version]$offline -ge [version]"1.1.92.644") { 
     
     $urlru = switch ($mirror) {
-        $true { "https://mrnico98.github.io/AIMODS-Spotify/patches/Augmented%20translation/ru.json" }
+        $true { "https://mrnico98.github.io/SimpleSpotify/patches/Augmented%20translation/ru.json" }
         default { "https://github.com/MrNico98/AIMODS-Spotify/blob/main/patches/Augmented%20translation/ru.json" }
     }
 
