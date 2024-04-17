@@ -654,7 +654,7 @@ if ($langCode -eq 'ru' -and [version]$offline -ge [version]"1.1.92.644") {
     
     $urlru = switch ($mirror) {
         $true { "https://mrnico98.github.io/SimpleSpotify/patches/Augmented%20translation/ru.json" }
-        default { "https://github.com/MrNico98/AIMODS-Spotify/blob/main/patches/Augmented%20translation/ru.json" }
+        default { "https://raw.githubusercontent.com/MrNico98/SimpleSpotify/main/patches/Augmented%20translation/ru.json" }
     }
 
     $webjsonru = Get -Url $urlru
@@ -727,8 +727,8 @@ $ch = $null
 
 
 $url = switch ($mirror) {
-    $true { "https://mrnico98.github.io/AIMODS-Spotify/patches/patches.json" }
-    default { "https://raw.githubusercontent.com/MrNico98/AIMODS-Spotify/main/patches/patches.json" }
+    $true { "https://mrnico98.github.io/SimpleSpotify/patches/patches.json" }
+    default { "https://raw.githubusercontent.com/MrNico98/SimpleSpotify/main/patches/patches.json" }
 }
 
 $webjson = Get -Url $url -RetrySeconds 5
@@ -1407,8 +1407,8 @@ If ($test_spa) {
     if ($podcast_off -or $adsections_off) {
 
         $url = switch ($mirror) {
-            $true { "https://mrnico98.github.io/AIMODS-Spotify/js-helper/sectionBlock.js" }
-            default { "https://raw.githubusercontent.com/MrNico98/AIMODS-Spotify/main/js-helper/sectionBlock.js" }
+            $true { "https://mrnico98.github.io/SimpleSpotify/js-helper/sectionBlock.js" }
+            default { "https://raw.githubusercontent.com/MrNico98/SimpleSpotify/main/js-helper/sectionBlock.js" }
         }
         $section = Get -Url $url
         
