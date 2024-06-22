@@ -369,7 +369,7 @@ if (!($version -and $version -match $match_v)) {
     }
     else {  
         # Recommended version for Win 10-12
-        $onlineFull = "1.2.34.783.g923721d9-5822"
+        $onlineFull = "1.2.40.599.g606b7f29-1500"
     }
 }
 else {
@@ -1421,10 +1421,10 @@ If ($test_spa) {
     $zip = [System.IO.Compression.ZipFile]::Open($xpui_spa_patch, 'update')
     $entry = $zip.GetEntry('xpui.js')
     $reader = New-Object System.IO.StreamReader($entry.Open())
-    $patched_by_aimods = $reader.ReadToEnd()
+    $patched_by_AIMODS = $reader.ReadToEnd()
     $reader.Close()
 
-    If ($patched_by_aimods -match 'Versione moddata AIMODS') {
+    If ($patched_by_AIMODS -match 'Versione moddata AIMODS') {
         $zip.Dispose()    
 
         if ($test_bak_spa) {
@@ -1473,7 +1473,7 @@ If ($test_spa) {
     }
 
     # Forced exp
-    extract -counts 'one' -method 'zip' -name 'xpui.js' -helper 'ForcedExp' -add $webjson.others.byaimods.add
+    extract -counts 'one' -method 'zip' -name 'xpui.js' -helper 'ForcedExp' -add $webjson.others.byAIMODS.add
     
 
     # Hiding Ad-like sections or turn off podcasts from the homepage
@@ -1487,7 +1487,7 @@ If ($test_spa) {
         
         if ($section -ne $null) {
 
-            injection -p $xpui_spa_patch -f "aimods-helper" -n "sectionBlock.js" -c $section
+            injection -p $xpui_spa_patch -f "AIMODS-helper" -n "sectionBlock.js" -c $section
         }
         else {
             $podcast_off, $adsections_off = $false
