@@ -50,6 +50,14 @@
         },
         "downloadquality": {
             "version": {
+                "fr": "1.2.30",
+                "to": ""
+            },
+            "match": "(return[^;]*?)(null[^;]*?desktop\\.settings\\.downloadQuality\\.title)",
+            "replace": "return true ? $2"
+        },
+        "downloadqualityold": {
+            "version": {
                 "fr": "1.1.70",
                 "to": "1.2.29"
             },
@@ -417,33 +425,6 @@
                 "native_description": "Allow switching between the new Home Ads format and legacy HPTO format (as opposed to only showing the legacy HPTO format)",
                 "version": {
                     "fr": "1.2.34",
-                    "to": ""
-                }
-            },
-            "LyricsUpsell": {
-                "name": "enableLyricsUpsell",
-                "description": "Enable Lyrics Upsell",
-                "native_description": "Enable Lyrics Upsell",
-                "version": {
-                    "fr": "1.2.36",
-                    "to": ""
-                }
-            },
-            "ArtistNPVImpressionsLogging": {
-                "name": "enableArtistNPVImpressions",
-                "description": "Enables impression logging for the Artist About section in NPV",
-                "native_description": "Enables impression logging for the Artist About section in NPV",
-                "version": {
-                    "fr": "1.2.37",
-                    "to": ""
-                }
-            },
-            "SpotlightImpressionLogging": {
-                "name": "enableSpotlightImpressionLogging",
-                "description": "Enables impression logging for Spotlight",
-                "native_description": "Enables impression logging for Spotlight",
-                "version": {
-                    "fr": "1.2.37",
                     "to": ""
                 }
             }
@@ -919,7 +900,7 @@
             },
             "DevicePickerSidePanel": {
                 "name": "enableDevicePickerSidePanel",
-                "description": "Enables Device Picker as a side panel (temporarily disabled until 1.2.36 because it was broken in version 1.2.37)",
+                "description": "Enables Device Picker as a side panel",
                 "native_description": "Enables Device Picker as a side panel",
                 "version": {
                     "fr": "1.2.30",
@@ -950,7 +931,7 @@
                 "native_description": "New Connect Bar without arrow and clickable elements",
                 "version": {
                     "fr": "1.2.14",
-                    "to": "1.2.35"
+                    "to": ""
                 }
             },
             "ResizableTracklistColumns": {
@@ -976,7 +957,7 @@
                 "description": "Show filter tags on the Liked Songs entity view",
                 "native_description": "Show filter tags on the Liked Songs entity view",
                 "version": {
-                    "fr": "1.2.29",
+                    "fr": "1.2.32",
                     "to": ""
                 }
             },
@@ -1031,60 +1012,6 @@
                 "native_description": "Enable the right sidebar to collapse into the right margin",
                 "version": {
                     "fr": "1.2.34",
-                    "to": ""
-                }
-            },
-            "Spotlight": {
-                "name": "enableSpotlight",
-                "description": "adds a new section to the main page 'More like on...'",
-                "native_description": "Enables the Spotlight component on home",
-                "version": {
-                    "fr": "1.2.37",
-                    "to": ""
-                }
-            },
-            "SharingButtonOnMiniPlayer": {
-                "name": "enableSharingButtonOnMiniPlayer",
-                "description": "Enables sharing button on MiniPlayer (this also moves the (+) icon close to the title)",
-                "native_description": "Enables sharing button on MiniPlayer (this also moves the (+) icon close to the title)",
-                "version": {
-                    "fr": "1.2.39",
-                    "to": ""
-                }
-            },
-            "PrereleaseRadar": {
-                "name": "enablePrereleaseRadar",
-                "description": "Show a curated list of upcoming albums to a user",
-                "native_description": "Show a curated list of upcoming albums to a user",
-                "version": {
-                    "fr": "1.2.39",
-                    "to": ""
-                }
-            },
-            "PremiumOnlyModal": {
-                "name": "disablePremiumOnlyModal",
-                "description": "Disable the Premium Only Modal",
-                "native_description": "Disable the Premium Only Modal",
-                "version": {
-                    "fr": "1.2.39",
-                    "to": ""
-                }
-            },
-            "CenteredLayout": {
-                "name": "enableCenteredLayout",
-                "description": "Enable centered in 'what's new'",
-                "native_description": "Enable centered layout",
-                "version": {
-                    "fr": "1.2.39",
-                    "to": ""
-                }
-            },
-            "AlignedCurationSavedIn": {
-                "name": "enableAlignedCurationSavedIn",
-                "description": "Enables the Saved In section in Aligned Curation",
-                "native_description": "Enables the Saved In section in Aligned Curation",
-                "version": {
-                    "fr": "1.2.40",
                     "to": ""
                 }
             }
@@ -1199,16 +1126,6 @@
                     "fr": "1.2.33",
                     "to": ""
                 }
-            },
-            "shareButtonPositioning": {
-                "name": "shareButtonPositioning",
-                "description": "Share button positioning in NPV",
-                "native_description": "Share button positioning in NPV",
-                "value": "NPV_ALWAYS_VISIBLE",
-                "version": {
-                    "fr": "1.2.39",
-                    "to": ""
-                }
             }
         },
         "binary": {
@@ -1221,14 +1138,14 @@
                 "match": "(?<=desktop-update\/.)2(\/update)",
                 "replace": "7/update"
             },
-            "block_slots": {
+            "podcast_ad_block": {
                 "version": {
                     "fr": "1.1.59",
                     "to": ""
                 },
-                "add": "slot}(?=.{3,8}override_url)",
-                "match": "slots(?=.{3,8}override_url)",
-                "replace": "slot}"
+                "add": "podcass(?=-(?:pre|mid|post)roll)",
+                "match": "podcast(?=-(?:pre|mid|post)roll)",
+                "replace": "podcass"
             },
             "block_gabo": {
                 "version": {
@@ -1281,14 +1198,6 @@
                     "hover": "#C8C8C8",
                     "background": "#121212",
                     "maxmatch": "#969696"
-                },
-                "spotify#2": {
-                    "pasttext": "#9b9b9b",
-                    "current": "#1ed760",
-                    "next": "#666666",
-                    "hover": "#f2f2f2",
-                    "background": "#242424",
-                    "maxmatch": "#C2C2C2"
                 },
                 "blue": {
                     "pasttext": "#575757",
@@ -1523,7 +1432,7 @@
             },
             "match": [
                 "(:hover{color:var)\\(--lyrics-color-active\\)",
-                "((?:kGR_hu4tdj9PnUlSPaRL|LomBcMvfM8AEmZGquAdj){color:var)\\(--lyrics-color-inactive\\)"
+                "(kGR_hu4tdj9PnUlSPaRL{color:var)\\(--lyrics-color-inactive\\)"
             ],
             "replace": [
                 "$1(--lyrics-color-hover)!important",
@@ -1667,13 +1576,6 @@
                 ""
             ]
         },
-        "downloadquality": {
-            "version": {
-                "fr": "1.2.30",
-                "to": ""
-            },
-            "add": " :is(.weV_qxFz4gF5sPotO10y, .BMtRRwqaJD_95vJFMFD0):has([for=\"desktop.settings.downloadQuality\"]) {display: none}"
-        },
         "downloadicon": {
             "version": {
                 "fr": "1.1.74",
@@ -1689,10 +1591,6 @@
             "add": " .pzkhLqffqF_4hucrVVQA, .egE6UQjF_UUoCzvMxREj {display:none}"
         },
         "veryhighstream": {
-            "version": {
-                "fr": "1.1.74",
-                "to": "1.2.29"
-            },
             "add": " #desktop\\.settings\\.streamingQuality>option:nth-child(5) {display:none}"
         },
         "fix-old-theme": {
@@ -1710,19 +1608,19 @@
                 "fr": "1.1.93",
                 "to": ""
             },
-            "match": "(this\\.(?:productStateApi|_product_state)(?:|_service)=(.))(?=}|(?:,this\\.cache=.)?,this\\.productStateApi|,this\\._events)",
-            "replace": "$1,$2?.putOverridesValues?.({0})",
+            "match": "(this\\._product_state(?:|_service)=(.))",
+            "replace": "$1,$2.putOverridesValues({0})",
             "add": "ads:'0',catalogue:'premium',product:'premium',type:'premium',name:'Spotify','unrestricted':'1'",
             "add2": "'storage-size-config':'{0},90,500,3'"
         },
         "dev-tools": {
             "version": {
                 "fr": "1.1.98",
-                "to": "1.2.37"
+                "to": ""
             },
             "match": [
                 "(onSelected:).{3,14}({..\"app.enable.developer.mode.,).\\)(,.\\(!0\\))?}",
-                "{(.{5,20}?|)(this\\.(?:productStateApi|_product_state)(?:|_service)=(.))(?=}|,this\\.productStateApi|,this\\._events|,.\\?\\.putOverridesValues)",
+                "{(.{5,20}?|)(this\\._product_state(?:|_service)=(.))",
                 "(..\\(.\\)|.)(\\?(..createElement|\\(.{1,7}jsxs\\))\\(.{1,3},{filterMatchQuery:.{2,15}\\(\"settings.employee\"\\))"
             ],
             "replace": [
@@ -1802,22 +1700,6 @@
             },
             "match": "min:320,max:420",
             "replace": "min:250,max:400"
-        },
-        "filtertags_locale_fix": {
-            "version": {
-                "fr": "1.2.29",
-                "to": "1.2.37"
-            },
-            "match": "(getTracksFilterTags.+?(.)=this._builder.build\\(\\)),",
-            "replace": "$1;$2.locale = 'en';const "
-        },
-        "lyrics-block": {
-            "version": {
-                "fr": "1.1.70",
-                "to": ""
-            },
-            "match": "(?:\\(?await )?.\\.build.{20,60}encodeURIComponent.{20,140}\"\\/track\\/{trackId}.+?send\\(\\)(?:\\)\\.body)?",
-            "replace": "{}"
         }
     }
 }

@@ -87,9 +87,6 @@ param
     
     [Parameter(HelpMessage = 'Returns old lyrics')]
     [switch]$old_lyrics,
-
-    [Parameter(HelpMessage = 'Disable native lyrics')]
-    [switch]$lyrics_block,
     
     [Parameter(HelpMessage = 'Do not create desktop shortcut.')]
     [switch]$no_shortcut,
@@ -369,7 +366,7 @@ if (!($version -and $version -match $match_v)) {
     }
     else {  
         # Recommended version for Win 10-12
-        $onlineFull = "1.2.40.599.g606b7f29-1500"
+        $onlineFull = "1.2.34.783.g923721d9-5822"
     }
 }
 else {
@@ -556,38 +553,7 @@ function DesktopFolder {
     return $desktop_folder
 }
 
-function Kill-Spotify {
-    param (
-        [int]$maxAttempts = 5
-    )
-
-    for ($attempt = 1; $attempt -le $maxAttempts; $attempt++) {
-        $allProcesses = Get-Process -ErrorAction SilentlyContinue
-
-        $spotifyProcesses = $allProcesses | Where-Object { $_.ProcessName -like "*spotify*" }
-
-        if ($spotifyProcesses) {
-            foreach ($process in $spotifyProcesses) {
-                try {
-                    Stop-Process -Id $process.Id -Force
-                }
-                catch {
-                    # Ignore NoSuchProcess exception
-                }
-            }
-            Start-Sleep -Seconds 1
-        }
-        else {
-            break
-        }
-    }
-
-    if ($attempt -gt $maxAttempts) {
-        Write-Host "The maximum number of attempts to terminate a process has been reached."
-    }
-}
-
-Kill-Spotify
+taskkill /f /im Spotify.exe /t > $null 2>&1
 
 # Remove Spotify Windows Store If Any
 if ($win10 -or $win11 -or $win8_1 -or $win8 -or $win12) {
@@ -626,29 +592,25 @@ $hostsFilePath = Join-Path $Env:windir 'System32\Drivers\Etc\hosts'
 $hostsBackupFilePath = Join-Path $Env:windir 'System32\Drivers\Etc\hosts.bak'
 
 if (Test-Path -Path $hostsFilePath) {
+    $hosts = Get-Content -Path $hostsFilePath
 
-    $hosts = [System.IO.File]::ReadAllLines($hostsFilePath)
-    $regex = "^(?!#|\|)((?:.*?(?:download|upgrade)\.scdn\.co|.*?spotify).*)"
-
-    if ($hosts -match $regex) {
-
-        Write-Host ($lang).HostInfo`n
-        Write-Host ($lang).HostBak`n
+    if ($hosts -match '^[^\#|].+scdn.+|^[^\#|].+spotify.+') {
+        Write-Host ($lang).HostInfo
+        Write-Host ($lang).HostBak
 
         Copy-Item -Path $hostsFilePath -Destination $hostsBackupFilePath -ErrorAction SilentlyContinue
 
         if ($?) {
-
             Write-Host ($lang).HostDel
-
             try {
-                $hosts = $hosts | Where-Object { $_ -notmatch $regex }
-                [System.IO.File]::WriteAllLines($hostsFilePath, $hosts)
+                $hosts = $hosts -replace '^[^\#|].+scdn.+|^[^\#|].+spotify.+', ''
+                $hosts = $hosts | Where-Object { $_.trim() -ne "" }
+                Set-Content -Path $hostsFilePath -Value $hosts -Force
             }
             catch {
-                Write-Host ($lang).HostError`n -ForegroundColor Red
+                Write-Host ($lang).HostError -ForegroundColor Red
                 $copyError = $Error[0]
-                Write-Host "Error: $($copyError.Exception.Message)`n" -ForegroundColor Red
+                Write-Host "Error: $($copyError.Exception.Message)" -ForegroundColor Red
             }
         }
         else {
@@ -949,11 +911,7 @@ function Helper($paramname) {
 
             if ($enhance_like_off) { Remove-Json -j $Enable -p'EnhanceLikedSongs' }
             if ($enhance_playlist_off) { Remove-Json -j $Enable -p 'EnhancePlaylist' }
-
             
-            if ([version]$offline -eq [version]'1.2.37.701' -or [version]$offline -eq [version]'1.2.38.720' ) { 
-                Move-Json -n 'DevicePickerSidePanel' -t $Enable -f $Disable
-            }
 
             if ($enhanceSongs -and [version]$offline -le [version]'1.2.25.1011') { 
                 Move-Json -n 'SmartShuffle' -t $Enable -f $Disable 
@@ -961,13 +919,13 @@ function Helper($paramname) {
             else { 
              
                 if ([version]$offline -ge [version]'1.2.22.980') {
-                    Move-Json -n "EnhanceLikedSongs", "EnhancePlaylist" -t $Enable -f $Disable 
+                    Move-Json -n "EnhanceLikedSongs", "EnhancePlaylist"-t $Enable -f $Disable
                 }
              
             }
             if ([version]$offline -eq [version]'1.2.30.1135') { Move-Json -n 'QueueOnRightPanel' -t $Enable -f $Disable }
 
-            if (!($plus)) { Move-Json -n "Plus", "AlignedCurationSavedIn" -t $Enable -f $Disable }
+            if (!($plus)) { Move-Json -n 'Plus' -t $Enable -f $Disable }
 
             if (!($topsearchbar)) { 
                 Move-Json -n "GlobalNavBar" -t $Enable -f $Disable 
@@ -1107,42 +1065,11 @@ function Helper($paramname) {
             $contents = "collaboration"
             $json = $webjson.others
         }
-        "Dev" { 
-
-            $name = "patches.json.others."
-            $n = "xpui-routes-desktop-settings.js"
-            $contents = "dev-tools"
-            $json = $webjson.others
-
-        }  
         "VariousofXpui-js" { 
 
             $VarJs = $webjson.VariousJs
 
-            if (!($lyrics_block)) { Remove-Json -j $VarJs -p "lyrics-block" }
-
-
             if (!($devtools)) { Remove-Json -j $VarJs -p "dev-tools" }
-
-            else {
-                if ([version]$offline -ge [version]"1.2.35.663") {
-
-                    # Create a copy of 'dev-tools'
-                    $newDevTools = $webjson.VariousJs.'dev-tools'.PSObject.Copy()
-                    
-                    # Delete the first item and change the version
-                    $newDevTools.match = $newDevTools.match[0], $newDevTools.match[2]
-                    $newDevTools.replace = $newDevTools.replace[0], $newDevTools.replace[2]
-                    $newDevTools.version.fr = '1.2.35'
-                    
-                    # Assign a copy of 'devtools' to the 'devtools' property in $web json.others
-                    $webjson.others | Add-Member -Name 'dev-tools' -Value $newDevTools -MemberType NoteProperty
-					
-                    # leave only first item in $web json.Various Js.'devtools' match & replace
-                    $webjson.VariousJs.'dev-tools'.match = $webjson.VariousJs.'dev-tools'.match[1]
-                    $webjson.VariousJs.'dev-tools'.replace = $webjson.VariousJs.'dev-tools'.replace[1] 
-                }
-            }
 
             if ($urlform_goofy -and $idbox_goofy) {
                 $webjson.VariousJs.goofyhistory.replace = "`$1 const urlForm=" + '"' + $urlform_goofy + '"' + ";const idBox=" + '"' + $idbox_goofy + '"' + $webjson.VariousJs.goofyhistory.replace
@@ -1421,10 +1348,10 @@ If ($test_spa) {
     $zip = [System.IO.Compression.ZipFile]::Open($xpui_spa_patch, 'update')
     $entry = $zip.GetEntry('xpui.js')
     $reader = New-Object System.IO.StreamReader($entry.Open())
-    $patched_by_AIMODS = $reader.ReadToEnd()
+    $patched_by_aimods = $reader.ReadToEnd()
     $reader.Close()
 
-    If ($patched_by_AIMODS -match 'Versione moddata AIMODS') {
+    If ($patched_by_aimods -match 'Versione moddata AIMODS') {
         $zip.Dispose()    
 
         if ($test_bak_spa) {
@@ -1473,7 +1400,7 @@ If ($test_spa) {
     }
 
     # Forced exp
-    extract -counts 'one' -method 'zip' -name 'xpui.js' -helper 'ForcedExp' -add $webjson.others.byAIMODS.add
+    extract -counts 'one' -method 'zip' -name 'xpui.js' -helper 'ForcedExp' -add $webjson.others.byaimods.add
     
 
     # Hiding Ad-like sections or turn off podcasts from the homepage
@@ -1487,7 +1414,7 @@ If ($test_spa) {
         
         if ($section -ne $null) {
 
-            injection -p $xpui_spa_patch -f "AIMODS-helper" -n "sectionBlock.js" -c $section
+            injection -p $xpui_spa_patch -f "aimods-helper" -n "sectionBlock.js" -c $section
         }
         else {
             $podcast_off, $adsections_off = $false
@@ -1497,9 +1424,6 @@ If ($test_spa) {
 
     extract -counts 'one' -method 'zip' -name 'xpui.js' -helper 'VariousofXpui-js' 
 
-    if ($devtools -and [version]$offline -ge [version]"1.2.35.663") {
-        extract -counts 'one' -method 'zip' -name 'xpui-routes-desktop-settings.js' -helper 'Dev' 
-    }
 
     # Hide Collaborators icon
     if (!($hide_col_icon_off) -and !($exp_spotify)) {
@@ -1539,11 +1463,7 @@ If ($test_spa) {
     extract -counts 'more' -name '*.js' -helper 'MinJs'
 
     # xpui.css
-    if (!($premium)) {       
-         # Hide download block
-        if ([version]$offline -ge [version]"1.2.30.1135") {
-            $css += $webjson.others.downloadquality.add
-        }
+    if (!($premium)) {
         # Hide download icon on different pages
         $css += $webjson.others.downloadicon.add
         # Hide submenu item "download"
@@ -1622,7 +1542,7 @@ $ANSI = [Text.Encoding]::GetEncoding(1251)
 $old = [IO.File]::ReadAllText($spotifyExecutable, $ANSI)
 
 $rexex1 = $old -notmatch $webjson.others.binary.block_update.add
-$rexex2 = $old -notmatch $webjson.others.binary.block_slots.add
+$rexex2 = $old -notmatch $webjson.others.binary.podcast_ad_block.add
 $rexex3 = $old -notmatch $webjson.others.binary.block_gabo.add
 
 if ($rexex1 -and $rexex2 -and $rexex3) {
