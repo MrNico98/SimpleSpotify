@@ -78,10 +78,10 @@ param
     
     [Parameter(HelpMessage = 'Returns old lyrics')]
     [switch]$old_lyrics,
-    
+
     [Parameter(HelpMessage = 'Disable native lyrics')]
     [switch]$lyrics_block,
-    
+
     [Parameter(HelpMessage = 'Do not create desktop shortcut.')]
     [switch]$no_shortcut,
 
@@ -652,7 +652,7 @@ if (Test-Path -Path $hostsFilePath) {
 
 # Unique directory name based on time
 Push-Location -LiteralPath ([System.IO.Path]::GetTempPath())
-New-Item -Type Directory -Name "AIMODS_Temp-$(Get-Date -UFormat '%Y-%m-%d_%H-%M-%S')" | Convert-Path | Set-Location
+New-Item -Type Directory -Name "aimods_Temp-$(Get-Date -UFormat '%Y-%m-%d_%H-%M-%S')" | Convert-Path | Set-Location
 
 if ($premium) {
     Write-Host ($lang).Prem`n
@@ -660,12 +660,6 @@ if ($premium) {
 
 $spotifyInstalled = (Test-Path -LiteralPath $spotifyExecutable)
 
-if ($spotifyInstalled) {
-    
-    # Check version Spotify offline
-    $offline = (Get-Item $spotifyExecutable).VersionInfo.FileVersion
-
-}
 
 # Delete Spotify shortcut if it is on desktop
 if ($no_shortcut) {
@@ -941,7 +935,7 @@ function Helper($paramname) {
             if ([version]$offline -eq [version]'1.2.37.701' -or [version]$offline -eq [version]'1.2.38.720' ) { 
                 Move-Json -n 'DevicePickerSidePanel' -t $Enable -f $Disable
             }
-            
+
             if ([version]$offline -eq [version]'1.2.30.1135') { Move-Json -n 'QueueOnRightPanel' -t $Enable -f $Disable }
 
             if (!($plus)) { Move-Json -n "Plus", "AlignedCurationSavedIn" -t $Enable -f $Disable }
@@ -1246,7 +1240,7 @@ function extract ($counts, $method, $name, $helper, $add, $patch) {
             Add-Type -Assembly 'System.IO.Compression.FileSystem'
             $xpui_spa_patch = Join-Path (Join-Path $env:APPDATA 'Spotify\Apps') 'xpui.spa'
             $zip = [System.IO.Compression.ZipFile]::Open($xpui_spa_patch, 'update') 
-            $zip.Entries | Where-Object { $_.FullName -like $name -and $_.FullName.Split('/') -notcontains 'AIMODS-helper' } | foreach { 
+            $zip.Entries | Where-Object { $_.FullName -like $name -and $_.FullName.Split('/') -notcontains 'aimods-helper' } | foreach { 
                 $reader = New-Object System.IO.StreamReader($_.Open())
                 $xpui = $reader.ReadToEnd()
                 $reader.Close()
@@ -1363,16 +1357,7 @@ if ($test_spa -and $test_js) {
     Exit
 }
 
-if ($test_js) {
-    
-    do {
-        $ch = Read-Host -Prompt ($lang).Spicetify
-        Write-Host
-        if (!($ch -eq 'n' -or $ch -eq 'y')) { incorrectValue }
-    }
-    while ($ch -notmatch '^y$|^n$')
 
-}  
 
 if (!($test_js) -and !($test_spa)) { 
     Write-Host "xpui.spa not found, reinstall Spotify"

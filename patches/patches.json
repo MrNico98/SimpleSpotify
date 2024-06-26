@@ -75,7 +75,7 @@
                 "to": ""
             },
             "match": "(configuration:(.).getRemoteConfiguration.+?;)",
-            "replace": "$1const EnableExp=[],DisableExp=[],CustomExp=[],allExperiments=[EnableExp,DisableExp,CustomExp];allExperiments.forEach((expArray)=>{const values=$2.getRemoteConfiguration()?.values;if(values){expArray.forEach((exp)=>{if(expArray===EnableExp||expArray===DisableExp){values.set(exp,expArray===EnableExp);}else if(expArray===CustomExp){values.set(exp.name,exp.value);}});(window.AIMODS??={}).RemoteExp=values}});"
+            "replace": "$1const EnableExp=[],DisableExp=[],CustomExp=[],allExperiments=[EnableExp,DisableExp,CustomExp];allExperiments.forEach((expArray)=>{const values=$2.getRemoteConfiguration()?.values;if(values){expArray.forEach((exp)=>{if(expArray===EnableExp||expArray===DisableExp){values.set(exp,expArray===EnableExp);}else if(expArray===CustomExp){values.set(exp.name,exp.value);}});(window.aimods??={}).RemoteExp=values}});"
         },
         "DisableExp": {
             "InAppMessaging": {
@@ -1538,7 +1538,7 @@
             "match": "(permissionLevel:\"CONTRIBUTOR\".+?return)",
             "replace": "$1 null;"
         },
-        "byAIMODS": {
+        "byaimods": {
             "add": "// Patched by AIMODS"
         },
         "disablesentry": {
@@ -1726,8 +1726,8 @@
                 "(..\\(.\\)|.)(\\?(..createElement|\\(.{1,7}jsxs\\))\\(.{1,3},{filterMatchQuery:.{2,15}\\(\"settings.employee\"\\))"
             ],
             "replace": [
-                "$1(check)=>$2check);localStorage.setItem('dev-tools',check);AIMODS.ProductState.putOverridesValues({pairs:{'com.spotify.madprops.use.ucs.product.state':check?'1':'0','employee':check?'1':'0'}});setTimeout(()=>{window.sendCosmosRequest({ request:JSON.stringify({method:'POST',uri:'sp://desktop/v1/restart'})})},700);}",
-                "{window.AIMODS={ProductState:$3};if(localStorage.getItem('dev-tools')==='true'){$3.putOverridesValues({pairs:{'com.spotify.madprops.use.ucs.product.state':'1','employee':'1'}})};$1$2",
+                "$1(check)=>$2check);localStorage.setItem('dev-tools',check);aimods.ProductState.putOverridesValues({pairs:{'com.spotify.madprops.use.ucs.product.state':check?'1':'0','employee':check?'1':'0'}});setTimeout(()=>{window.sendCosmosRequest({ request:JSON.stringify({method:'POST',uri:'sp://desktop/v1/restart'})})},700);}",
+                "{window.aimods={ProductState:$3};if(localStorage.getItem('dev-tools')==='true'){$3.putOverridesValues({pairs:{'com.spotify.madprops.use.ucs.product.state':'1','employee':'1'}})};$1$2",
                 "true$2"
             ]
         },
