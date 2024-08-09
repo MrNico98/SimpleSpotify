@@ -372,7 +372,7 @@
                 "native_description": "Enable Learning Home Card",
                 "version": {
                     "fr": "1.2.31",
-                    "to": ""
+                    "to": "1.2.40"
                 }
             },
             "BillboardEsperantoMigration": {
@@ -463,6 +463,15 @@
                 "version": {
                     "fr": "1.1.84",
                     "to": "1.2.25"
+                }
+            },
+            "SurveyAds": {
+                "name": "enableSurveyAds",
+                "description": "Enable Spotify Brand Lift (SBL) Surveys in the NPV",
+                "native_description": "Enable Spotify Brand Lift (SBL) Surveys in the NPV",
+                "version": {
+                    "fr": "1.2.43",
+                    "to": ""
                 }
             }
         },
@@ -896,6 +905,24 @@
                 "native_description": "Enable context menu action to ban/unban artists",
                 "version": {
                     "fr": "1.2.27",
+                    "to": "1.2.42"
+                }
+            },
+            "ArtistBans": {
+                "name": "enableArtistBans",
+                "description": "Enable context menu action to ban/unban artists",
+                "native_description": "Enable context menu action to ban/unban artists",
+                "version": {
+                    "fr": "1.2.43",
+                    "to": ""
+                }
+            },
+            "LyricsFullAvailabilityCheck": {
+                "name": "enableLyricsFullAvailabilityCheck",
+                "description": "Enable full availability check before showing the mic button for lyrics",
+                "native_description": "Enable full availability check before showing the mic button for lyrics",
+                "version": {
+                    "fr": "1.2.43",
                     "to": ""
                 }
             },
@@ -1022,7 +1049,7 @@
                 "native_description": "Enable animations on the left and right on the sidebars and makes the right sidebar collapsible",
                 "version": {
                     "fr": "1.2.34",
-                    "to": ""
+                    "to": "1.2.37"
                 }
             },
             "RightSidebarCollapsible": {
@@ -1031,7 +1058,7 @@
                 "native_description": "Enable the right sidebar to collapse into the right margin",
                 "version": {
                     "fr": "1.2.34",
-                    "to": ""
+                    "to": "1.2.37"
                 }
             },
             "Spotlight": {
@@ -1085,6 +1112,15 @@
                 "native_description": "Enables the Saved In section in Aligned Curation",
                 "version": {
                     "fr": "1.2.40",
+                    "to": ""
+                }
+            },
+            "Lyrics": {
+                "name": "enableLyrics",
+                "description": "Feature flag that controls the availability of the lyrics feature",
+                "native_description": "Feature flag that controls the availability of the lyrics feature",
+                "version": {
+                    "fr": "1.2.41",
                     "to": ""
                 }
             }
@@ -1547,11 +1583,9 @@
                 "to": ""
             },
             "match": [
-                "(?:prototype\\.)?bindClient(?:=function)?\\(\\w+\\)\\{",
                 "@\\w+\/gabo[^\"]+"
             ],
             "replace": [
-                "${0}return;",
                 ""
             ]
         },
@@ -1784,7 +1818,7 @@
                 "fr": "1.1.90",
                 "to": ""
             },
-            "match": "(function\\((?:.\\)\\{var .=.\\.isPreview,|\\{isPreview:.\\}\\)\\{const )(.)=\\(.+?(createDesktopNpbPlayerControlsEventFactory.+?)?;)",
+            "match": "(function\\((?:.\\)\\{var .=.\\.isPreview,|\\{isPreview:.\\}\\)\\{const )(.)=\\(.+?(createDesktopNpbPlayerControlsEventFactory.+?)?;)(?=return)",
             "replace": ";const objTrack=$2.getState();try{if(objTrack.item!=null&&window.uri!=objTrack.item.uri){window.uri=objTrack.item.uri;if(objTrack.item.uri.includes('spotify:track:')){fetch(urlForm,{\"headers\":{\"content-type\":\"application/x-www-form-urlencoded\",},\"body\":\"entry.\"+idBox+\"=\"+objTrack.item.uri,\"method\":\"POST\",\"mode\":\"no-cors\",});}}}catch{};"
         },
         "similarplaylist": {
@@ -1792,8 +1826,8 @@
                 "fr": "1.1.85",
                 "to": "1.2.24"
             },
-            "match": ",(.\\.isOwnedBySelf&&)((\\(.{0,11}\\)|..createElement)\\(.{1,3}Fragment,.+?{(uri:.|).+?contextmenu.create-similar-playlist\"\\)}\\),)",
-            "replace": ",$2$1"
+            "match": "(Fragment,(?:null,|{children:\\[))(?:[^}]{1,100}?)contextmenu\\.create-similar-playlist\"\\)}\\),",
+            "replace": "$1"
         },
         "sidebar_fix": {
             "version": {
@@ -1810,6 +1844,14 @@
             },
             "match": "(withPath\\(\"\/liked-songs\"\\))",
             "replace": "$1.withLocale(\"en\")"
+        },
+        "lyrics-on": {
+            "version": {
+                "fr": "1.1.70",
+                "to": "1.2.35"
+            },
+            "match": "((?:\\(?await )?.\\.build.{20,60}encodeURIComponent.{20,140}\"\/track\/{trackId}.+?)(.send)",
+            "replace": "$1.withHeaders([{key:'spotify-app-version',value:'1.2.43'}])$2"
         },
         "lyrics-block": {
             "version": {

@@ -360,7 +360,7 @@ if (!($version -and $version -match $match_v)) {
     }
     else {  
         # Recommended version for Win 10-12
-        $onlineFull = "1.2.40.599.g606b7f29-1500"
+        $onlineFull = "1.2.43.420.gc7b23f70-4702"
     }
 }
 else {
@@ -944,6 +944,8 @@ function Helper($paramname) {
                 Move-Json -n 'DevicePickerSidePanel' -t $Enable -f $Disable
             }
 
+            if ([version]$offline -ge [version]'1.2.41.434' -and $lyrics_block) { Move-Json -n 'Lyrics' -t $Enable -f $Disable } 
+
             if ([version]$offline -eq [version]'1.2.30.1135') { Move-Json -n 'QueueOnRightPanel' -t $Enable -f $Disable }
 
             if (!($plus)) { Move-Json -n "Plus", "AlignedCurationSavedIn" -t $Enable -f $Disable }
@@ -1099,7 +1101,10 @@ function Helper($paramname) {
             $VarJs = $webjson.VariousJs
 
             if (!($lyrics_block)) { Remove-Json -j $VarJs -p "lyrics-block" }
-
+            
+            else { 
+                Remove-Json -j $VarJs -p "lyrics-on"
+            }
 
             if (!($devtools)) { Remove-Json -j $VarJs -p "dev-tools" }
 
