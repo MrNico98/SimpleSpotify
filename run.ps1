@@ -265,8 +265,8 @@ function Get-Link {
     )
 
     switch ($mirror) {
-        $true { return "https://amstore-na.github.io/SimpleSpotify" + $endlink }
-        default { return "https://raw.githubusercontent.com/AMStore-na/SimpleSpotify/main" + $endlink }
+        $true { return "https://mrnico98.github.io/SimpleSpotify" + $endlink }
+        default { return "https://raw.githubusercontent.com/MrNico98/SimpleSpotify/main" + $endlink }
     }
 }
 
